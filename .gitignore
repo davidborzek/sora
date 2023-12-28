@@ -1,0 +1,21 @@
+.vscode
+.idea
+
+*.py[cd]
+*.py~
+*.so
+*.o
+__pycache__
+.mypy_cache
+MANIFEST
+/build
+/dist
+
+.coverage
+.DS_Store
+
+venv
+.venv
+
+# Devlopment config directory
+.config
