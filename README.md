@@ -72,7 +72,7 @@ $ sora --inspector
 ## Running locally
 
 ```bash
-$ ./bin/sora -c .config/
+$ ./bin/sora start -c .config/
 ```
 
 > Note: You should create a local config directory at `.config/` for development.
