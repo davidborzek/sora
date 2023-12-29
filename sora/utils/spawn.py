@@ -1,10 +1,25 @@
 import logging
+import re
 from typing import Callable
 from gi.repository import GLib, Gio
 
 
-def subprocess(cmd: list[str], callback: Callable[[str], None]):
+def subprocess(
+    cmd: list[str] | str,
+    callback: Callable[[str], None],
+):
+    """
+    Starts a subprocess and calls the callback for each line of stdout.
+
+    :param cmd: The command to run.
+    :param callback: The callback to call for each line of stdout.
+    :return: The subprocess.
+    """
+
     try:
+        if type(cmd) is str:
+            cmd = re.split(r"\s+", cmd)
+
         process = Gio.Subprocess.new(
             cmd,
             Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
