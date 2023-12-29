@@ -1,31 +1,46 @@
+import logging
 from typing import Callable
 from gi.repository import GLib, Gio
 
 
 def subprocess(cmd: list[str], callback: Callable[[str], None]):
-    def read(stdout: Gio.DataInputStream):
-        def cb(stream: Gio.DataInputStream, res):
-            if stream:
-                (output, _) = stream.read_line_finish_utf8(res)
-                if type(output) is str:
-                    callback(output)
-                    read(stream)
+    try:
+        process = Gio.Subprocess.new(
+            cmd,
+            Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
+        )
 
-            pass
+        if not process:
+            raise Exception("failed to start subprocess: process is None")
 
-        stdout.read_line_async(GLib.PRIORITY_LOW, None, cb)
+        def read(stdout: Gio.DataInputStream):
+            def cb(stream: Gio.DataInputStream, res):
+                if stream:
+                    (output, _) = stream.read_line_finish_utf8(res)
+                    if type(output) is str:
+                        callback(output)
+                        read(stream)
 
-    process = Gio.Subprocess.new(
-        cmd,
-        Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
-    )
+            stdout.read_line_async(GLib.PRIORITY_LOW, None, cb)
 
-    if not process:
-        return
+        pipe = process.get_stdout_pipe()
+        if not pipe:
+            raise Exception("failed to start subprocess: stdout is None")
 
-    pipe = process.get_stdout_pipe()
-    stdout = Gio.DataInputStream.new(pipe)
+        stdout = Gio.DataInputStream(
+            base_stream=pipe,
+            close_base_stream=True,
+        )
 
-    read(stdout)
+        read(stdout)
 
-    return process
+        process.wait_async(
+            None,
+            lambda *_: logging.info(
+                f"Subprocess finished with exit code {process.get_exit_status()}"
+            ),
+        )
+
+        return process
+    except Exception as e:
+        raise Exception(f"failed to start subprocess {e}")

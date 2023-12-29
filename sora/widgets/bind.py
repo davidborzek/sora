@@ -75,9 +75,6 @@ class Variable(Generic[T], GObject.GObject):
             variable.value = data
 
         variable.__process = subprocess(cmd, on_data)
-        if not variable.__process:
-            raise Exception("failed to start subprocess listener")
-
         return variable
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
