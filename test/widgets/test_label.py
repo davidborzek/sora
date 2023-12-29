@@ -17,10 +17,11 @@ ANGLE = 90
 XALIGN = 0.8
 YALIGN = 0.2
 
+
 class TestBaseWidget(unittest.TestCase):
     def test_init_with_defaults(self):
         label = Label(LabelProps())
 
         self.assertFalse(label.get_label())
-    
+
         pass
