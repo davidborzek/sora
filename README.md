@@ -51,6 +51,10 @@ Checkout the [Supported CSS Properties](https://docs.gtk.org/gtk3/css-properties
 
 The styles are loaded from the config directory, and sora looks for a `style.scss` or `style.css` file.
 
+## Configuration API
+
+You can find a basic documentation for the configuration API [here](docs/index.md).
+
 ### GTK Debugger
 
 You can use the GTK Debugger to inspect the widgets and their properties.
