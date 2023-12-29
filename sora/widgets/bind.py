@@ -1,7 +1,9 @@
 import logging
 from typing import Any, Callable, Generic, TypeVar
 
-from gi.repository import GObject, GLib
+from gi.repository import GObject, GLib, Gio
+
+from sora.utils.spawn import subprocess
 
 T = TypeVar("T")
 
@@ -14,6 +16,7 @@ class Variable(Generic[T], GObject.GObject):
     __value: T
     __transform: Callable[[T], Any] | None = None
     __interval_id: int | None = None
+    __process: Gio.Subprocess | None = None
 
     def __init__(self, v: T) -> None:
         """
@@ -53,6 +56,28 @@ class Variable(Generic[T], GObject.GObject):
             return GLib.SOURCE_CONTINUE
 
         variable.__interval_id = GLib.timeout_add_seconds(interval, on_timeout)
+        return variable
+
+    @classmethod
+    def listen(cls, cmd: list[str], initial: str = ""):
+        """
+        Creates a new variable that listens on a command output and updates itself.
+
+        :param cmd: The listening command.
+        :param initial: The initial value.
+        :return: The created variable.
+        """
+
+        variable = cls(initial)
+
+        def on_data(data: str):
+            print(data)
+            variable.value = data
+
+        variable.__process = subprocess(cmd, on_data)
+        if not variable.__process:
+            raise Exception("failed to start subprocess listener")
+
         return variable
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
@@ -98,8 +123,24 @@ class Variable(Generic[T], GObject.GObject):
 
         if self.__interval_id:
             GLib.source_remove(self.__interval_id)
+            self.__interval_id = None
         else:
             logging.warn("Cannot stop interval: no interval running.")
 
+    def stop_listener(self):
+        """
+        Stops the listener. When the listener is not running, nothing happens.
+        """
+
+        if self.__process:
+            self.__process.force_exit()
+            self.__process = None
+        else:
+            logging.warn("Cannot stop listener: no process running.")
+
 
 Bindable = T | Variable[T]
+"""
+Bindable defines a value that can be either a normal python value
+or a bindable variable.
+"""
