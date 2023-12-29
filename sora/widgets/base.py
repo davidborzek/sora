@@ -1,4 +1,5 @@
 from dataclasses import dataclass, fields
+import re
 from gi.repository import Gtk, GObject, Gdk
 from sora.widgets.bind import Bindable, Variable
 from sora.widgets.cursor import Cursor
@@ -34,7 +35,7 @@ class BaseWidgetProps:
     # TODO: width and height
 
     # Custom Properties
-    classnames: Bindable[list[str]] | None = None
+    classnames: Bindable[list[str] | str] | None = None
     cursor: Bindable[Cursor] = Cursor.DEFAULT
 
 
@@ -88,10 +89,13 @@ def BaseWidget(Widget: type[Gtk.Widget]):
             return self.get_style_context().list_classes() or []
 
         @classnames.setter
-        def classnames(self, classnames: list[str]):
+        def classnames(self, classnames: list[str] | str):
             """
             Sets the classnames of the widget.
             """
+
+            if type(classnames) is str:
+                classnames = re.split(" +", classnames.strip())
 
             style_context = self.get_style_context()
             for classname in style_context.list_classes():
