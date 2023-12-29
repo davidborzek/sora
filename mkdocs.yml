@@ -1,0 +1,33 @@
+site_name: sora
+site_description: sora Documentation
+
+theme:
+  name: "material"
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: brown
+      accent: brown
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: brown
+      accent: brown
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+repo_url: https://github.com/davidborzek/sora
+
+nav:
+  - "Welcome": "index.md"
+  - "Window": "window.md"
+  - "Widgets": "widgets.md"
+  - "Bindable": "bindable.md"
