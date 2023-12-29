@@ -6,7 +6,8 @@ from sora.cmd import start
 
 def main():
     main_parser = argparse.ArgumentParser(
-        prog="sora", description="sora is an experimental widget system, extendable and configurable using python and based on GTK3."
+        prog="sora",
+        description="sora is an experimental widget system, extendable and configurable using python and based on GTK3.",
     )
 
     main_parser.add_argument(

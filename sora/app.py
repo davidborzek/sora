@@ -15,7 +15,7 @@ class App:
     ):
         """
         Creates a new App.
-        
+
         :param config: The config to use.
         """
 
