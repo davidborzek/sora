@@ -46,9 +46,9 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
     A EventBox that can be hovered, scrolled and clicked.
     """
 
-    _on_hover: Callable[[], None] | None = None
-    _on_hover_lost: Callable[[], None] | None = None
-    _on_scroll: Callable[[ScrollDirection], None] | None = None
+    __on_hover: Callable[[], None] | None = None
+    __on_hover_lost: Callable[[], None] | None = None
+    __on_scroll: Callable[[ScrollDirection], None] | None = None
     __on_click: Callable[[], None] | None = None
     __on_middle_click: Callable[[], None] | None = None
     __on_right_click: Callable[[], None] | None = None
@@ -69,23 +69,17 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         self._bind_property("on_middle_click", props.on_middle_click)
         self._bind_property("on_right_click", props.on_right_click)
 
-        if self._on_hover:
-            self.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
-            self.connect("enter-notify-event", lambda *_: self._on_hover())
+        self.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
+        self.connect("enter-notify-event", self.__handle_hover)
 
-        if self._on_hover_lost:
-            self.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)
-            self.connect("leave-notify-event", lambda *_: self._on_hover_lost())
+        self.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)
+        self.connect("leave-notify-event", self.__handle_hover_lost)
 
-        if self._on_scroll:
-            self.add_events(Gdk.EventMask.SCROLL_MASK)
-            self.add_events(Gdk.EventMask.SMOOTH_SCROLL_MASK)
+        self.add_events(Gdk.EventMask.SCROLL_MASK)
+        self.add_events(Gdk.EventMask.SMOOTH_SCROLL_MASK)
+        self.connect("scroll-event", self.__handle_scroll)
 
-            self.connect("scroll-event", self.__on_scroll)
-
-        if self.__on_click or self.__on_middle_click or self.__on_right_click:
-            self.connect("button-press-event", self.__handle_on_click)
-
+        self.connect("button-press-event", self.__handle_on_click)
         self.connect("enter-notify-event", self.__set_css_hover)
         self.connect("leave-notify-event", self.__unset_css_hover)
         self.connect("button-press-event", self.__set_css_active)
@@ -116,7 +110,7 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         The function to call when the mouse enters the event box.
         """
 
-        return self._on_hover
+        return self.__on_hover
 
     @on_hover.setter
     def on_hover(self, on_hover: Callable[[], None] | None):
@@ -124,7 +118,7 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         Sets the function to call when the mouse enters the event box.
         """
 
-        self._on_hover = on_hover
+        self.__on_hover = on_hover
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def on_hover_lost(self) -> Callable[[], None] | None:
@@ -132,7 +126,7 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         The function to call when the mouse leaves the event box.
         """
 
-        return self._on_hover_lost
+        return self.__on_hover_lost
 
     @on_hover_lost.setter
     def on_hover_lost(self, on_hover_lost: Callable[[], None] | None):
@@ -140,7 +134,7 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         Sets the function to call when the mouse leaves the event box.
         """
 
-        self._on_hover_lost = on_hover_lost
+        self.__on_hover_lost = on_hover_lost
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def on_scroll(self) -> Callable[[ScrollDirection], None] | None:
@@ -148,7 +142,7 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         The function to call when the mouse is scrolled.
         """
 
-        return self._on_scroll
+        return self.__on_scroll
 
     @on_scroll.setter
     def on_scroll(self, on_scroll: Callable[[ScrollDirection], None] | None):
@@ -156,7 +150,7 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         Sets the function to call when the mouse is scrolled.
         """
 
-        self._on_scroll = on_scroll
+        self.__on_scroll = on_scroll
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def on_click(self):
@@ -222,7 +216,23 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
             case 3 if self.on_right_click:
                 self.on_right_click()
 
-    def __on_scroll(self, _, event: Gdk.EventScroll):
+    def __handle_hover(self, *_):
+        """
+        Handles a hover event.
+        """
+
+        if self.__on_hover:
+            self.__on_hover()
+
+    def __handle_hover_lost(self, *_):
+        """
+        Handles a hover lost event.
+        """
+
+        if self.__on_hover_lost:
+            self.__on_hover_lost()
+
+    def __handle_scroll(self, _, event: Gdk.EventScroll):
         """
         Handles a scroll event.
 
@@ -230,16 +240,19 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         :param event: The event.
         """
 
+        if not self.__on_scroll:
+            return
+
         (_, x, y) = event.get_scroll_deltas()
         if y < 0:
-            self._on_scroll(ScrollDirection.UP)
+            self.__on_scroll(ScrollDirection.UP)
         elif y > 0:
-            self._on_scroll(ScrollDirection.DOWN)
+            self.__on_scroll(ScrollDirection.DOWN)
 
         if x > 0:
-            self._on_scroll(ScrollDirection.RIGHT)
+            self.__on_scroll(ScrollDirection.RIGHT)
         elif x < 0:
-            self._on_scroll(ScrollDirection.LEFT)
+            self.__on_scroll(ScrollDirection.LEFT)
 
     def __set_css_hover(self, widget: Gtk.EventBox, _):
         """
