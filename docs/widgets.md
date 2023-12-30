@@ -182,6 +182,34 @@ label = Label(
 )
 ```
 
+## Revealer
+
+A widget that can reveal its child.
+
+**Properties**
+
+| Property              | Type                                                                                                           | Description                                     |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `reveal_child`        | `bool`                                                                                                         | Whether the child is revealed or not.           |
+| `transition_duration` | `int`                                                                                                          | The duration of the transition in milliseconds. |
+| `transition_type`     | [`Gtk.RevealerTransitionType`](https://lazka.github.io/pgi-docs/Gtk-3.0/enums.html#Gtk.RevealerTransitionType) | The type of the transition.                     |
+| `child`               | [`Gtk.Widget`](https://lazka.github.io/pgi-docs/index.html#Gtk-3.0/classes/Widget.html#Gtk.Widget)             | The child of the revealer.                      |
+
+**Example**
+
+```python
+from sora.widgets.revealer import Revealer, RevealerProps
+
+revealer = Revealer(
+    RevealerProps(
+        reveal_child=True,
+        transition_duration=500,
+        transition_type=Gtk.RevealerTransitionType.CROSSFADE,
+        child=Label(LabelProps(label="Hello, world!")),
+    ),
+)
+```
+
 ## Slider
 
 A slider widget.
