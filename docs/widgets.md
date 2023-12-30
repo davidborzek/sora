@@ -181,3 +181,52 @@ label = Label(
     ),
 )
 ```
+
+## Slider
+
+A slider widget.
+
+**Properties**
+
+| Property       | Type                                                                                     | Description                                                   |
+| -------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `orientation`  | [`Gtk.Orientation`](https://lazka.github.io/pgi-docs/Gtk-3.0/enums.html#Gtk.Orientation) | The orientation of the slider.                                |
+| `inverted`     | `bool`                                                                                   | Whether the slider is inverted.                               |
+| `max`          | `float`                                                                                  | The maximum value of the slider.                              |
+| `min`          | `float`                                                                                  | The minimum value of the slider.                              |
+| `step`         | `float`                                                                                  | The step of the slider.                                       |
+| `value`        | `float`                                                                                  | The value of the slider.                                      |
+| `draw_value`   | `bool`                                                                                   | Whether the value is drawn.                                   |
+| `round_digits` | `int`                                                                                    | The number of digits to round to.                             |
+| `marks`        | `list[list[tuple[float, Gtk.PositionType, str]]]`                                        | The marks of the slider.                                      |
+| `scrollable`   | `bool`                                                                                   | Whether the slider is scrollable.                             |
+| `on_change`    | `Callable[[float], None]`                                                                | The callback that is called when the slider value is changed. |
+
+**Example**
+
+```python
+from sora.widgets.slider import Slider, SliderProps
+from gi.repository import Gtk
+
+slider = Slider(
+    SliderProps(
+        orientation=Gtk.Orientation.VERTICAL,
+        inverted=True,
+        max=100,
+        min=0,
+        step=1,
+        value=50,
+        draw_value=True,
+        round_digits=0,
+        marks=[
+            [
+                (0, Gtk.PositionType.TOP, "0"),
+                (50, Gtk.PositionType.TOP, "50"),
+                (100, Gtk.PositionType.TOP, "100"),
+            ]
+        ],
+        scrollable=True,
+        on_change=lambda value: print(f"Value changed to {value}!"),
+    ),
+)
+```

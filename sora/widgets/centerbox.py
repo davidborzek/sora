@@ -31,6 +31,8 @@ class CenterBox(BaseWidget(Gtk.Box), Gtk.Box):
         """
 
         super().__init__(props)
+        self._bind_property("children", props.children)
+        self._bind_property("orientation", props.orientation)
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def children(self) -> tuple[Gtk.Widget, Gtk.Widget, Gtk.Widget]:

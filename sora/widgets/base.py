@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields
 import re
+from typing import Any
 from gi.repository import Gtk, GObject, Gdk
 from sora.widgets.bind import Bindable, Variable
 from sora.widgets.cursor import Cursor
@@ -62,16 +63,16 @@ def BaseWidget(Widget: type[Gtk.Widget]):
             """
 
             super().__init__()
-
-            # TODO: refactor me
-            for field in fields(props):
-                value = getattr(props, field.name)
-                if value is not None and self.find_property(field.name):
-                    if isinstance(value, Variable):
-                        value.bind(self, field.name)
-                        value = value.value
-
-                    self.set_property(field.name, value)
+            self._bind_property("name", props.name)
+            self._bind_property("visible", props.visible)
+            self._bind_property("tooltip-text", props.tooltip_text)
+            self._bind_property("valign", props.valign)
+            self._bind_property("halign", props.halign)
+            self._bind_property("hexpand", props.hexpand)
+            self._bind_property("vexpand", props.vexpand)
+            self._bind_property("sensitive", props.sensitive)
+            self._bind_property("classnames", props.classnames)
+            self._bind_property("cursor", props.cursor)
 
             if not self.cursor == Cursor.DEFAULT:
                 self.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
@@ -138,5 +139,24 @@ def BaseWidget(Widget: type[Gtk.Widget]):
             window = self.get_window()
             if window:
                 window.set_cursor(None)
+
+        def _bind_property(self, name: str, value: Any):
+            """
+            Sets a property of the widget.
+
+            :param name: The name of the property.
+            :param value: The value of the property.
+            """
+
+            if value is None:
+                return
+
+            if not self.find_property(name):
+                raise AttributeError(f"Widget has no property '{name}'")
+
+            if isinstance(value, Variable):
+                value.bind(self, name)
+            else:
+                self.set_property(name, value)
 
     return _Widget

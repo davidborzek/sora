@@ -42,3 +42,9 @@ class Label(BaseWidget(Gtk.Label), Gtk.Label):
         """
 
         super().__init__(props)
+        self._bind_property("label", props.label)
+        self._bind_property("justify", props.justify)
+        self._bind_property("wrap", props.wrap)
+        self._bind_property("angle", props.angle)
+        self._bind_property("xalign", props.xalign)
+        self._bind_property("yalign", props.yalign)
