@@ -13,6 +13,23 @@ A window defines a window on the screen, which can contain a single widget.
 | `geometry`    | [`Geometry`](#geometry)     | The geometry of the window.                                                                                    |
 | `window_type` | [`WindowType`](#windowtype) | The type of the window.                                                                                        |
 
+**Example**
+
+```python
+from sora.window import Window, WindowType
+from sora.geometry import Geometry
+from sora.widgets.label import Label, LabelProps
+
+window = Window(
+    name="My Window",
+    widget=Label(LabelProps(label="Hello, world!")),
+    monitor=0,
+    wm_ignore=True,
+    geometry=Geometry(x="50%", y="50%", width="100px", height="100px"),
+    window_type=WindowType.DOCK,
+)
+```
+
 ## Geometry
 
 The geometry of a window.

@@ -1,5 +1,7 @@
 # Styling
 
+## GTK CSS
+
 sora uses [GTK CSS](https://docs.gtk.org/gtk3/css-overview.html) for styling. You can style your widgets using either [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) or [Sass](https://sass-lang.com/).
 GTK CSS is similar to Vanilla CSS, but does not support all CSS Properties.
 Checkout the [Supported CSS Properties](https://docs.gtk.org/gtk3/css-properties.html) for more information.
