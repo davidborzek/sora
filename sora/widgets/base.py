@@ -53,7 +53,7 @@ def BaseWidget(Widget: type[Gtk.Widget]):
         Base widget for all widgets.
         """
 
-        __cursor: str
+        __cursor: Cursor = Cursor.DEFAULT
 
         def __init__(self, props: BaseWidgetProps):
             """
@@ -74,12 +74,10 @@ def BaseWidget(Widget: type[Gtk.Widget]):
             self._bind_property("classnames", props.classnames)
             self._bind_property("cursor", props.cursor)
 
-            if not self.cursor == Cursor.DEFAULT:
-                self.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
-                self.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)
-
-                self.connect("enter-notify-event", self.__set_cursor_on_hover)
-                self.connect("leave-notify-event", self.__unset_cursor_on_hover)
+            self.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)
+            self.add_events(Gdk.EventMask.LEAVE_NOTIFY_MASK)
+            self.connect("enter-notify-event", self.__set_cursor_on_hover)
+            self.connect("leave-notify-event", self.__unset_cursor_on_hover)
 
         @GObject.Property(type=GObject.TYPE_PYOBJECT)
         def classnames(self) -> list[str]:
@@ -105,13 +103,13 @@ def BaseWidget(Widget: type[Gtk.Widget]):
             for classname in classnames:
                 style_context.add_class(classname)
 
-        @GObject.Property(type=str)
+        @GObject.Property(type=GObject.TYPE_PYOBJECT)
         def cursor(self):
             """
             The cursor of the widget.
             """
 
-            return Cursor(self.__cursor)
+            return self.__cursor
 
         @cursor.setter
         def cursor(self, cursor: Cursor):
@@ -129,7 +127,7 @@ def BaseWidget(Widget: type[Gtk.Widget]):
             display = Gdk.Display.get_default()
             window = self.get_window()
             if display and window:
-                window.set_cursor(Gdk.Cursor.new_from_name(display, self.__cursor))
+                window.set_cursor(self.__cursor.to_gdk_cursor(display))
 
         def __unset_cursor_on_hover(self, *_):
             """

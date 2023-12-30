@@ -1,5 +1,7 @@
 from enum import Enum
 
+from gi.repository import Gdk
+
 
 class Cursor(Enum):
     """
@@ -41,5 +43,12 @@ class Cursor(Enum):
     ZOOM_IN = "zoom-in"
     ZOOM_OUT = "zoom-out"
 
-    def __str__(self):
-        return str(self.value)
+    def to_gdk_cursor(self, display: Gdk.Display) -> Gdk.Cursor:
+        """
+        Converts the cursor to a Gdk.Cursor.
+
+        :param display: The Gdk Display.
+        :return: The Gdk.Cursor.
+        """
+
+        return Gdk.Cursor.new_from_name(display, self.value)
