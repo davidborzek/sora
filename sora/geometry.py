@@ -22,7 +22,7 @@ class Percent(Unit):
     Represents a percentage value.
     """
 
-    pattern = re.compile("(\d.*)%")
+    pattern = re.compile(r"(\d.*)%")
 
     def __init__(self, value: float):
         """
@@ -71,7 +71,7 @@ class Pixel(Unit):
     Represents a pixel value.
     """
 
-    pattern = re.compile("(\d.*)px")
+    pattern = re.compile(r"(\d.*)px")
 
     def __init__(self, value: int):
         """
