@@ -3,6 +3,12 @@ site_description: sora Documentation
 
 theme:
   name: "material"
+
+  features:
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+
   palette:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
@@ -23,6 +29,11 @@ theme:
         name: Switch to light mode
   icon:
     repo: fontawesome/brands/github
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/davidborzek/sora
 
 repo_url: https://github.com/davidborzek/sora
 
