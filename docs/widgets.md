@@ -32,6 +32,24 @@ A layout container that can contain multiple widgets.
 | `homogeneous` | `bool`                                                                                                   | Whether the box should be homogeneous or not. |
 | `children`    | [`list[Gtk.Widget]`](https://lazka.github.io/pgi-docs/index.html#Gtk-3.0/classes/Widget.html#Gtk.Widget) | The children of the box.                      |
 
+**Example**
+
+```python
+from sora.widgets.box import Box, BoxProps
+from gi.repository import Gtk
+
+box = Box(
+    BoxProps(
+        spacing=10,
+        orientation=Gtk.Orientation.VERTICAL,
+        homogeneous=True,
+        children=[
+            # Add other widgets here.
+        ],
+    ),
+)
+```
+
 ## Button
 
 A button widget.
@@ -45,6 +63,21 @@ A button widget.
 | `on_middle_click` | `Callable[[], None]` | The callback that is called when the button is middle clicked. |
 | `on_right_click`  | `Callable[[], None]` | The callback that is called when the button is right clicked.  |
 
+**Example**
+
+```python
+from sora.widgets.button import Button, ButtonProps
+
+button = Button(
+    ButtonProps(
+        label="Click me!",
+        on_click=lambda: print("Clicked!"),
+        on_middle_click=lambda: print("Middle clicked!"),
+        on_right_click=lambda: print("Right clicked!"),
+    ),
+)
+```
+
 ## CenterBox
 
 A box that must contain exactly three children, which will be placed at the start, center and end of the box.
@@ -56,6 +89,20 @@ A box that must contain exactly three children, which will be placed at the star
 | `start`  | [`Gtk.Widget`](https://lazka.github.io/pgi-docs/index.html#Gtk-3.0/classes/Widget.html#Gtk.Widget) | The start child of the box.  |
 | `center` | [`Gtk.Widget`](https://lazka.github.io/pgi-docs/index.html#Gtk-3.0/classes/Widget.html#Gtk.Widget) | The center child of the box. |
 | `end`    | [`Gtk.Widget`](https://lazka.github.io/pgi-docs/index.html#Gtk-3.0/classes/Widget.html#Gtk.Widget) | The end child of the box.    |
+
+**Example**
+
+```python
+from sora.widgets.centerbox import CenterBox, CenterBoxProps
+
+centerbox = CenterBox(
+    CenterBoxProps(
+        start=Label(LabelProps(label="Start")),
+        center=Label(LabelProps(label="Center")),
+        end=Label(LabelProps(label="End")),
+    ),
+)
+```
 
 ## EventBox
 
@@ -74,6 +121,24 @@ A widget that can receive events and must contain exactly one child.
 | `on_right_click`  | `Callable[[], None]`                                                                               | The callback that is called when the event box is right clicked.  |
 
 > Note: Supports `:hover` and `:active` CSS pseudo classes.
+
+**Example**
+
+```python
+from sora.widgets.eventbox import EventBox, EventBoxProps
+
+eventbox = EventBox(
+    EventBoxProps(
+        child=Label(LabelProps(label="Hover or click me!")),
+        on_hover=lambda: print("Hovered!"),
+        on_hover_lost=lambda: print("Unhovered!"),
+        on_scroll=lambda direction: print(f"Scrolled {direction}!"),
+        on_click=lambda: print("Clicked!"),
+        on_middle_click=lambda: print("Middle clicked!"),
+        on_right_click=lambda: print("Right clicked!"),
+    ),
+)
+```
 
 ### ScrollDirection
 
@@ -98,3 +163,21 @@ A label widget.
 | `angle`   | `float`                                                                                      | The angle of the label.                |
 | `xalign`  | `float`                                                                                      | The horizontal alignment of the label. |
 | `yalign`  | `float`                                                                                      | The vertical alignment of the label.   |
+
+**Example**
+
+```python
+from sora.widgets.label import Label, LabelProps
+from gi.repository import Gtk
+
+label = Label(
+    LabelProps(
+        label="Hello, world!",
+        justify=Gtk.Justification.CENTER,
+        wrap=True,
+        angle=45,
+        xalign=0.5,
+        yalign=0.5,
+    ),
+)
+```
