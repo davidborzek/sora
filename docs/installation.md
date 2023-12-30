@@ -8,7 +8,6 @@
 
     - `python3`
     - `meson`
-    - `ninja`
     - `python3-gi`
     - `gir1.2-gtk-3.0`
     - `python3-libsass`
