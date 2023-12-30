@@ -5,12 +5,8 @@ from os.path import normpath, dirname, join, realpath, isdir
 
 LAUNCH_PATH = dirname(realpath(__file__))
 
-SOURCE_PATH = normpath(join(LAUNCH_PATH, "../lib/sora"))
-
 if isdir(join(LAUNCH_PATH, "../sora")):
-    SOURCE_PATH = normpath(join(LAUNCH_PATH, ".."))
-
-sys.path.insert(0, SOURCE_PATH)
+    sys.path.insert(0, normpath(join(LAUNCH_PATH, "..")))
 
 from sora.cmd.main import main
 

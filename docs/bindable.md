@@ -5,7 +5,7 @@ A `Variable` can be used to update the value of the property.
 
 ## Variable
 
-You can create a manual `Variable` thats is mutable and updates the value of the property when it is changed:
+You can create a manual `Variable` that is mutable and updates the value of the property when it is changed:
 
 ```python
 from sora.widgets.bind import Variable

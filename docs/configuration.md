@@ -1,8 +1,8 @@
 # Configuration
 
-sora is configured using python, and the configuration file is located at `$XDG_CONFIG_HOME/sora/config.py`. (usually `~/.config/sora/config.py`)
+sora is configured using python and the configuration file is located at `$XDG_CONFIG_HOME/sora/config.py`. (usually `~/.config/sora/config.py`)
 
-You can specify the config directory using `-c` flag.
+You can specify the config directory using the `-c` flag.
 
 ## Quick start
 
