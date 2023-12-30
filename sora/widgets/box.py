@@ -35,6 +35,10 @@ class Box(BaseWidget(Gtk.Box), Gtk.Box):
         """
 
         super().__init__(props)
+        self._bind_property("orientation", props.orientation)
+        self._bind_property("spacing", props.spacing)
+        self._bind_property("homogeneous", props.homogeneous)
+        self._bind_property("children", props.children)
 
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def children(self) -> list[Gtk.Widget]:

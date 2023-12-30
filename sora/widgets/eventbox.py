@@ -61,6 +61,13 @@ class EventBox(BaseWidget(Gtk.EventBox), Gtk.EventBox):
         """
 
         super().__init__(props)
+        self._bind_property("child", props.child)
+        self._bind_property("on_hover", props.on_hover)
+        self._bind_property("on_hover_lost", props.on_hover_lost)
+        self._bind_property("on_scroll", props.on_scroll)
+        self._bind_property("on_click", props.on_click)
+        self._bind_property("on_middle_click", props.on_middle_click)
+        self._bind_property("on_right_click", props.on_right_click)
 
         if self._on_hover:
             self.add_events(Gdk.EventMask.ENTER_NOTIFY_MASK)

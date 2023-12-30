@@ -41,6 +41,10 @@ class Button(BaseWidget(Gtk.Button), Gtk.Button):
         """
 
         super().__init__(props)
+        self._bind_property("label", props.label)
+        self._bind_property("on_click", props.on_click)
+        self._bind_property("on_middle_click", props.on_middle_click)
+        self._bind_property("on_right_click", props.on_right_click)
 
         if self.__on_click or self.__on_middle_click or self.__on_right_click:
             self.connect("button-press-event", self.__handle_on_click)

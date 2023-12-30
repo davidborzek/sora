@@ -105,6 +105,7 @@ class Variable(Generic[T], GObject.GObject):
         """
 
         self.connect("notify::value", lambda *_: self.__on_bind(object, prop))
+        object.set_property(prop, self.value)
 
     def __on_bind(self, object: GObject.GObject, prop: str):
         """
