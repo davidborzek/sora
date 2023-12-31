@@ -2,7 +2,7 @@ from dataclasses import dataclass, fields
 import re
 from typing import Any
 from gi.repository import Gtk, GObject, Gdk
-from sora.widgets.bind import Bindable, Variable
+from sora.widgets.bind import Bindable, Binding, Variable
 from sora.widgets.cursor import Cursor
 
 
@@ -153,6 +153,8 @@ def BaseWidget(Widget: type[Gtk.Widget]):
                 raise AttributeError(f"Widget has no property '{name}'")
 
             if isinstance(value, Variable):
+                value.bind(self, name)
+            elif isinstance(value, Binding):
                 value.bind(self, name)
             else:
                 self.set_property(name, value)
