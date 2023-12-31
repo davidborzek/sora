@@ -26,7 +26,17 @@ class RevealerProps(BaseWidgetProps):
 
 
 class Revealer(BaseWidget(Gtk.Revealer), Gtk.Revealer):
+    """
+    A widget that animates the transition of its child.
+    """
+
     def __init__(self, props: RevealerProps):
+        """
+        Create a new Revealer widget.
+
+        :param props: The properties for the Revealer widget.
+        """
+
         super().__init__(props)
 
         self._bind_property("reveal_child", props.reveal_child)

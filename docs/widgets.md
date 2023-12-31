@@ -258,3 +258,38 @@ slider = Slider(
     ),
 )
 ```
+
+## Stack
+
+A stack widget.
+
+**Properties**
+
+| Property              | Type                                                                                                     | Description                                        |
+| --------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `transition_type`     | [`Gtk.StackTransitionType`](https://lazka.github.io/pgi-docs/Gtk-3.0/enums.html#Gtk.StackTransitionType) | The type of the transition.                        |
+| `transition_duration` | `int`                                                                                                    | The duration of the transition in milliseconds.    |
+| `items`               | `dict[Gtk.Widget]`                                                                                       | A dictionary of child widgets to add to the stack. |
+| `visible_child_name`  | `str`                                                                                                    | The name of the visible child.                     |
+| `vhomogeneous`        | `bool`                                                                                                   | Whether the stack should be homogeneous or not.    |
+| `hhomogeneous`        | `bool`                                                                                                   | Whether the stack should be homogeneous or not.    |
+
+**Example**
+
+```python
+from sora.widgets.stack import Stack, StackProps
+
+stack = Stack(
+    StackProps(
+        transition_type=Gtk.StackTransitionType.CROSSFADE,
+        transition_duration=500,
+        items={
+            "page1": Label(LabelProps(label="Page 1")),
+            "page2": Label(LabelProps(label="Page 2")),
+        },
+        visible_child_name="page1",
+        vhomogeneous=True,
+        hhomogeneous=True,
+    ),
+)
+```
