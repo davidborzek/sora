@@ -12,6 +12,6 @@ You can create your own widgets in any window manager.
 - [:octicons-book-24: &nbsp; **Window**](window.md)
 - [:octicons-book-24: &nbsp; **Widgets**](widgets.md)
 - [:octicons-book-24: &nbsp; **Styling**](styling.md)
-- [:octicons-book-24: &nbsp; **Bindable**](bindable.md)
+- [:octicons-book-24: &nbsp; **Dynamic Content**](dynamic_content.md)
 
 </div>

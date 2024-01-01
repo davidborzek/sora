@@ -6,7 +6,7 @@ gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
 
-from sora.widgets.bind import Variable
+from sora.variable import Variable
 from sora.widgets.base import BaseWidget, BaseWidgetProps
 from sora.widgets.cursor import Cursor
 

@@ -3,7 +3,7 @@ from sora.widgets.base import BaseWidget, BaseWidgetProps
 
 from gi.repository import Gtk
 
-from sora.widgets.bind import Bindable
+from sora.service import Bindable
 
 
 @dataclass(kw_only=True)

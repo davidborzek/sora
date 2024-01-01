@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from sora.widgets.base import BaseWidget, BaseWidgetProps
-from sora.widgets.bind import Bindable
+from sora.service import Bindable
 
 from gi.repository import Gtk
 

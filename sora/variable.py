@@ -1,50 +1,10 @@
 import logging
-from typing import Any, Callable, Generic, TypeVar
+from typing import Callable, Generic, TypeVar
 
 from gi.repository import GObject, GLib, Gio
+from sora.service import Binding
 
 from sora.utils.spawn import subprocess
-
-
-class Binding:
-    __gobject: GObject.GObject
-    __source_prop: str
-    __map_fn: Callable[[Any], Any] | None = None
-
-    def __init__(self, gobject: GObject.GObject, prop: str) -> None:
-        self.__gobject = gobject
-        self.__source_prop = prop
-
-    def map(self, fn: Callable[[Any], Any]):
-        """
-        Sets the map function.
-
-        :param fn: The map function.
-        :return: The binding.
-        """
-
-        self.__map_fn = fn
-        return self
-
-    def __get_value(self):
-        value = self.__gobject.get_property(self.__source_prop)
-        if self.__map_fn:
-            value = self.__map_fn(value)
-        return value
-
-    def bind(self, object: GObject.GObject, prop: str):
-        """
-        Binds the variable to the given GObject property.
-
-        :param object: The GObject to bind to.
-        :param prop: The property to bind to.
-        """
-
-        def on(*_):
-            GLib.idle_add(object.set_property, prop, self.__get_value())
-
-        object.set_property(prop, self.__get_value())
-        self.__gobject.connect(f"notify::{self.__source_prop}", on)
 
 
 T = TypeVar("T")
@@ -56,7 +16,6 @@ class Variable(Generic[T], GObject.GObject):
     """
 
     __value: T
-    __transform: Callable[[T], Any] | None = None
     __interval_id: int | None = None
     __process: Gio.Subprocess | None = None
 
@@ -69,17 +28,6 @@ class Variable(Generic[T], GObject.GObject):
 
         super().__init__()
         self.__value = v
-
-    def map(self, transform: Callable[[T], Any]):
-        """
-        Sets the transform function.
-
-        :param transform: The transform function.
-        :return: The variable.
-        """
-
-        self.__transform = transform
-        return self
 
     @classmethod
     def interval(cls, interval, func: Callable[[], T]):
@@ -125,9 +73,6 @@ class Variable(Generic[T], GObject.GObject):
         The value of the variable.
         """
 
-        if self.__transform:
-            return self.__transform(self.__value)
-
         return self.__value
 
     @value.setter
@@ -138,23 +83,12 @@ class Variable(Generic[T], GObject.GObject):
 
         self.__value = v
 
-    def bind(self, object: GObject.GObject, prop: str):
+    def bind(self):
         """
-        Binds the variable to the given GObject property.
-
-        :param object: The GObject to bind to.
-        :param prop: The property to bind to.
+        Creates a new binding to the variable.
         """
 
-        self.connect("notify::value", lambda *_: self.__on_bind(object, prop))
-        object.set_property(prop, self.value)
-
-    def __on_bind(self, object: GObject.GObject, prop: str):
-        """
-        Called when the variable has changed and the GObject property should be updated.
-        """
-
-        GLib.idle_add(object.set_property, prop, self.value)
+        return Binding(self, "value")
 
     def stop_interval(self):
         """
@@ -177,10 +111,3 @@ class Variable(Generic[T], GObject.GObject):
             self.__process = None
         else:
             logging.warn("Cannot stop listener: no process running.")
-
-
-Bindable = T | Variable[T]
-"""
-Bindable defines a value that can be either a normal python value
-or a bindable variable.
-"""

@@ -7,7 +7,7 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 from sora.widgets.label import Label, LabelProps
-from sora.widgets.bind import Variable
+from sora.variable import Variable
 
 
 LABEL = "SomeLabel"

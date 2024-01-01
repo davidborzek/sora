@@ -1,11 +1,10 @@
 import threading
 from dataclasses import dataclass
-from typing import Any, Callable
 from gi.repository import GObject
 
 from i3ipc import Connection, Event, WorkspaceReply
 
-from sora.widgets.bind import Binding
+from sora.service import Service
 
 
 @dataclass(kw_only=True)
@@ -44,7 +43,7 @@ class i3Workspace:
         )
 
 
-class _i3(GObject.GObject):
+class _i3(Service):
     __thread: threading.Thread
     __i3 = Connection(auto_reconnect=True)
 
@@ -76,19 +75,6 @@ class _i3(GObject.GObject):
     @GObject.Property(type=GObject.TYPE_PYOBJECT)
     def workspaces(self):
         return self.__workspaces
-
-    def bind(
-        self,
-        prop: str,
-    ):
-        """
-        Binds the variable to the given GObject property.
-
-        :param object: The GObject to bind to.
-        :param prop: The property to bind to.
-        """
-
-        return Binding(self, prop)
 
     def command(self, cmd: str):
         """

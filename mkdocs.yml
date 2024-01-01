@@ -5,6 +5,7 @@ theme:
   name: "material"
 
   features:
+    - navigation.sections
     - navigation.top
     - navigation.footer
     - content.code.copy
@@ -41,10 +42,15 @@ nav:
   - "Welcome": "index.md"
   - "Installation": "installation.md"
   - "Configuration": "configuration.md"
-  - "Styling": "styling.md"
-  - "Window": "window.md"
-  - "Widgets": "widgets.md"
-  - "Bindable": "bindable.md"
+
+  - Usage:
+      - "Styling": "styling.md"
+      - "Window": "window.md"
+      - "Widgets": "widgets.md"
+      - "Dynamic Content": "dynamic_content.md"
+
+  - Services:
+      - "i3": "services/i3.md"
 
 markdown_extensions:
   - pymdownx.highlight:
